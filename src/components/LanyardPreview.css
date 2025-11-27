@@ -1,0 +1,405 @@
+.lanyard-preview-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.lanyard-preview-modal {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border-radius: 20px;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.2);
+  max-width: 90vw;
+  max-height: 90vh;
+  width: 100%;
+  overflow-y: auto;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(20px);
+  animation: slideUp 0.3s ease-out;
+}
+
+.lanyard-preview-header {
+  background: linear-gradient(135deg, #e0e7ef 0%, #cfd9e9 100%);
+  padding: 1.5rem 2rem;
+  border-radius: 20px 20px 0 0;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.lanyard-preview-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.3;
+}
+
+.lanyard-preview-subtitle {
+  font-size: 1rem;
+  color: #64748b;
+  margin: 0;
+  font-weight: 500;
+}
+
+.lanyard-preview-content {
+  padding: 2rem;
+}
+
+.lanyard-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  justify-items: center;
+}
+
+/* A6 Size Lanyard Design (105mm × 148mm) */
+.lanyard-page {
+  width: 105mm;
+  height: 148mm;
+  background: linear-gradient(135deg, #e0e7ef 0%, #cfd9e9 100%);
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+  border: 2px solid #007bff;
+  margin: 0 auto;
+  transform: scale(0.8);
+  transform-origin: center;
+  transition: transform 0.3s ease;
+}
+
+.lanyard-page:hover {
+  transform: scale(0.85);
+}
+
+.lanyard-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  box-sizing: border-box;
+}
+
+/* Watermark */
+.lanyard-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.08;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.lanyard-watermark img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
+
+/* Main Content */
+.lanyard-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Header with Logo */
+.lanyard-header {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.lanyard-logo {
+  height: 40px;
+  width: auto;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+/* Welcome Message */
+.lanyard-message {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.lanyard-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.3;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.lanyard-subtitle {
+  font-size: 0.85rem;
+  color: #475569;
+  margin: 0;
+  line-height: 1.4;
+  font-style: italic;
+}
+
+/* Visitor Info */
+.lanyard-info {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(0, 123, 255, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.1);
+}
+
+.lanyard-info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.lanyard-info-item:last-child {
+  margin-bottom: 0;
+}
+
+.lanyard-label {
+  font-weight: 600;
+  color: #475569;
+  min-width: 80px;
+}
+
+.lanyard-value {
+  font-weight: 500;
+  color: #1e293b;
+  text-align: right;
+  flex: 1;
+  margin-left: 0.5rem;
+}
+
+/* Footer */
+.lanyard-footer {
+  text-align: center;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(0, 123, 255, 0.2);
+}
+
+.lanyard-footer-text {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin: 0;
+  font-weight: 500;
+}
+
+.lanyard-preview-footer {
+  padding: 1.5rem 2rem 2rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 0 0 20px 20px;
+}
+
+.lanyard-preview-btn {
+  padding: 0.875rem 1.5rem;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  min-width: 140px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.lanyard-preview-btn-secondary {
+  background: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+}
+
+.lanyard-preview-btn-secondary:hover {
+  background: #e2e8f0;
+  color: #475569;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.lanyard-preview-btn-primary {
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  color: #ffffff;
+  border: 1px solid #007bff;
+}
+
+.lanyard-preview-btn-primary:hover {
+  background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+.lanyard-preview-btn:active {
+  transform: translateY(0);
+}
+
+/* Print Styles */
+@media print {
+  .lanyard-preview-overlay {
+    position: static;
+    background: none;
+    backdrop-filter: none;
+    padding: 0;
+  }
+
+  .lanyard-preview-modal {
+    box-shadow: none;
+    border-radius: 0;
+    max-width: none;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .lanyard-preview-header,
+  .lanyard-preview-footer {
+    display: none;
+  }
+
+  .lanyard-preview-content {
+    padding: 0;
+  }
+
+  .lanyard-preview-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    justify-items: stretch;
+  }
+
+  .lanyard-page {
+    width: 105mm;
+    height: 148mm;
+    transform: none;
+    margin: 0;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .lanyard-page:hover {
+    transform: none;
+  }
+
+  /* Ensure each lanyard prints on a separate page */
+  .lanyard-page {
+    page-break-after: always;
+  }
+
+  .lanyard-page:last-child {
+    page-break-after: auto;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .lanyard-preview-modal {
+    margin: 1rem;
+    max-width: calc(100vw - 2rem);
+  }
+
+  .lanyard-preview-header {
+    padding: 1rem 1.5rem;
+  }
+
+  .lanyard-preview-title {
+    font-size: 1.25rem;
+  }
+
+  .lanyard-preview-content {
+    padding: 1rem;
+  }
+
+  .lanyard-preview-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .lanyard-page {
+    transform: scale(0.7);
+  }
+
+  .lanyard-page:hover {
+    transform: scale(0.75);
+  }
+
+  .lanyard-preview-footer {
+    padding: 1rem 1.5rem 1.5rem;
+    flex-direction: column;
+  }
+
+  .lanyard-preview-btn {
+    width: 100%;
+    min-width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .lanyard-page {
+    transform: scale(0.6);
+  }
+
+  .lanyard-page:hover {
+    transform: scale(0.65);
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .lanyard-preview-modal {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .lanyard-preview-header {
+    background: linear-gradient(135deg, #334155 0%, #475569 100%);
+  }
+
+  .lanyard-preview-title {
+    color: #f1f5f9;
+  }
+
+  .lanyard-preview-subtitle {
+    color: #cbd5e1;
+  }
+
+  .lanyard-preview-footer {
+    background: rgba(30, 41, 59, 0.8);
+  }
+
+  .lanyard-preview-btn-secondary {
+    background: #334155;
+    color: #cbd5e1;
+    border-color: #475569;
+  }
+
+  .lanyard-preview-btn-secondary:hover {
+    background: #475569;
+    color: #f1f5f9;
+  }
+} 

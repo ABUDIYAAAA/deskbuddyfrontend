@@ -1,0 +1,19 @@
+.app {
+  height: 100vh;
+  background: var(--bg-primary);
+  transition: background 0.3s;
+}
+.app.dark {
+  background: #1e293b;
+}
+.main-content {
+  height: 100vh;
+  padding: 0;
+  background: transparent;
+  transition: background 0.3s, margin 0.3s;
+}
+@media (max-width: 900px) {
+  .main-content {
+    margin-left: 70px !important;
+  }
+} 

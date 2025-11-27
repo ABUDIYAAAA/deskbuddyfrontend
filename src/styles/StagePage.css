@@ -1,0 +1,368 @@
+/* Professional Stage Page Styles */
+.stage-page {
+  min-height: 100vh;
+  /* background: linear-gradient(135deg, #e0e7ef 0%, #cfd9e9 100%); */
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  overflow-x: hidden;
+  animation: fadeInBg 1s cubic-bezier(.4,0,.2,1);
+}
+@keyframes fadeInBg {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.stage-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+}
+
+/* Header Styles */
+.stage-header {
+  background: rgba(255,255,255,0.32);
+  border-bottom: 1.5px solid #e3e8f7;
+  padding: 2.2rem 0 1.5rem 0;
+  margin-bottom: 2.2rem;
+  box-shadow: 0 8px 40px 0 rgba(31, 38, 135, 0.10);
+  position: relative;
+  z-index: 2;
+  border-radius: 1.5rem;
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  transition: box-shadow 0.3s;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2.2rem;
+  padding: 0 2rem;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.5rem;
+  background: #fff;
+  color: #2563eb;
+  border: 1.5px solid #2563eb;
+  border-radius: 1.2rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  transition: all 0.2s;
+  box-shadow: 0 1px 4px 0 rgba(37, 99, 235, 0.06);
+  cursor: pointer;
+}
+.back-btn:hover {
+  background: #2563eb;
+  color: #fff;
+  border-color: #1d4ed8;
+  box-shadow: 0 4px 16px 0 rgba(37, 99, 235, 0.13);
+  transform: translateY(-2px) scale(1.03);
+}
+
+.page-info {
+  flex: 1;
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #222b45;
+  margin: 0 0 0.5rem 0;
+}
+
+.page-description {
+  font-size: 1.08rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Main Content */
+.stage-main {
+  padding-bottom: 3.5rem;
+}
+
+.stage-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2.2rem;
+  margin-bottom: 3.5rem;
+  padding: 2.2rem 0;
+  background: rgba(255,255,255,0.18);
+  border-radius: 2rem;
+  box-shadow: 0 4px 32px 0 rgba(37, 99, 235, 0.04);
+  justify-items: center;
+  backdrop-filter: blur(6px);
+}
+
+.stage-card {
+  width: 100%;
+  max-width: 350px;
+  min-height: 170px;
+  background: rgba(255,255,255,0.55);
+  border-radius: 1.5rem;
+  border: 1.5px solid #e3e8f7;
+  padding: 2rem 1.5rem;
+  cursor: pointer;
+  transition: box-shadow 0.25s, transform 0.25s, border-color 0.25s, background 0.25s;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  box-shadow: 0 2px 12px 0 rgba(37, 99, 235, 0.05);
+  animation: cardFadeIn 0.7s cubic-bezier(.4,1.4,.6,1);
+}
+@keyframes cardFadeIn {
+  from { opacity: 0; transform: translateY(30px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.stage-card.primary {
+  border-color: #2563eb;
+  background: linear-gradient(135deg, rgba(255,255,255,0.55) 0%, #e0e7ef 100%);
+}
+.stage-card.primary:hover {
+  transform: translateY(-8px) scale(1.045);
+  box-shadow: 0 12px 40px 0 rgba(37, 99, 235, 0.13);
+  border-color: #2563eb;
+  background: rgba(255,255,255,0.85);
+}
+.stage-card.secondary {
+  border-color: #e3e8f7;
+  background: rgba(255,255,255,0.45);
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+.stage-card.secondary:hover {
+  transform: none;
+  box-shadow: 0 2px 8px 0 rgba(37, 99, 235, 0.07);
+}
+.stage-card:active {
+  transform: translateY(-2px);
+}
+
+.card-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #e0e7ef 0%, #cfd9e9 100%);
+  box-shadow: 0 2px 8px 0 rgba(37, 99, 235, 0.10);
+  transition: background 0.25s, box-shadow 0.25s;
+}
+.stage-card.primary .card-icon {
+  background: linear-gradient(135deg, #2563eb 0%, #5bc0eb 100%);
+}
+.stage-card.secondary .card-icon {
+  background: #e3e8f7;
+}
+.card-icon img {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(37, 99, 235, 0.10));
+}
+.card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.card-title {
+  font-size: 1.13rem;
+  font-weight: 800;
+  color: #222b45;
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+.card-description {
+  font-size: 1.01rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.5;
+}
+.coming-soon {
+  display: inline-block;
+  background: #fbbf24;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.2rem 0.7rem;
+  border-radius: 0.5rem;
+  margin-top: 0.5rem;
+  align-self: flex-start;
+}
+.card-action {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  color: #b6c2d6;
+  transition: color 0.18s;
+}
+.stage-card.primary:hover .card-action {
+  color: #2563eb;
+}
+.stage-card.secondary .card-action {
+  color: #b6c2d6;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .stage-container {
+    padding: 0 1.2rem;
+  }
+  .stage-cards {
+    gap: 1.2rem;
+    padding: 1.2rem 0;
+  }
+  .stage-card {
+    max-width: 100%;
+    min-height: 140px;
+    padding: 1.2rem 1rem;
+  }
+}
+@media (max-width: 768px) {
+  .stage-header {
+    padding: 1.2rem 0 0.7rem 0;
+  }
+  .page-title {
+    font-size: 1.2rem;
+  }
+  .page-description {
+    font-size: 1rem;
+  }
+  .stage-cards {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1rem 0;
+  }
+  .stage-card {
+    min-height: 100px;
+    padding: 1rem 0.7rem;
+  }
+  .card-title {
+    font-size: 1.01rem;
+  }
+  .card-description {
+    font-size: 0.93rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .stage-container {
+    padding: 0 var(--space-4);
+  }
+  
+  .back-btn {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--font-size-xs);
+  }
+  
+  .card-icon {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .card-icon img {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .card-title {
+    font-size: var(--font-size-base);
+  }
+  
+  .card-description {
+    font-size: var(--font-size-xs);
+  }
+}
+
+.app.dark .stage-page {
+  background: linear-gradient(120deg, #18181b 0%, #23272f 100%);
+}
+.app.dark .stage-header {
+  background: rgba(36,37,42,0.94);
+  border-bottom: 1.5px solid rgba(129,140,248,0.18);
+  box-shadow: 0 8px 40px 0 rgba(0,0,0,0.38), 0 1.5px 8px 0 #818cf822 inset;
+  backdrop-filter: blur(22px) saturate(180%);
+}
+.app.dark .back-btn {
+  background: #23272f;
+  color: #a5b4fc;
+  border: 1.5px solid #a5b4fc;
+}
+.app.dark .back-btn:hover {
+  background: #a5b4fc;
+  color: #23272f;
+  border-color: #818cf8;
+}
+.app.dark .page-title {
+  color: #fff;
+}
+.app.dark .page-description {
+  color: #d1d5db;
+}
+.app.dark .stage-cards {
+  background: rgba(24,24,27,0.94);
+  box-shadow: 0 4px 32px 0 #818cf822, 0 1.5px 8px 0 #23272f44 inset;
+}
+.app.dark .stage-card {
+  background: rgba(24,24,27,0.92);
+  border: 1.5px solid rgba(129,140,248,0.10);
+  box-shadow: 0 2px 16px 0 #818cf822, 0 1.5px 8px 0 #23272f44 inset;
+  transition: box-shadow 0.25s, background 0.25s, border-color 0.25s, transform 0.18s cubic-bezier(.4,0,.2,1);
+}
+.app.dark .stage-card.primary {
+  background: linear-gradient(135deg, #23272f 0%, #18181b 100%);
+  border-color: #a5b4fc;
+}
+.app.dark .stage-card.primary:hover {
+  background: rgba(36,37,42,0.98);
+  border-color: #818cf8;
+  box-shadow: 0 8px 32px 0 #818cf844, 0 1.5px 8px 0 #23272f44 inset;
+  transform: translateY(-6px) scale(1.03);
+}
+.app.dark .stage-card.secondary {
+  background: rgba(36,37,42,0.75);
+  border-color: #23272f;
+}
+.app.dark .card-title {
+  color: #f3f4f6;
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+.app.dark .card-description {
+  color: #bfc7d5;
+  font-size: 1.03rem;
+}
+.app.dark .card-icon {
+  background: linear-gradient(135deg, #23272f 0%, #18181b 100%);
+  box-shadow: 0 2px 8px 0 #818cf822;
+}
+.app.dark .stage-card.primary .card-icon {
+  background: linear-gradient(135deg, #a5b4fc 0%, #818cf8 100%);
+}
+.app.dark .stage-card.secondary .card-icon {
+  background: #23272f;
+}
+.app.dark .stage-card:active {
+  box-shadow: 0 4px 16px 0 #818cf822;
+}
+  

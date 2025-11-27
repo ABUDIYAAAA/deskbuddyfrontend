@@ -1,0 +1,229 @@
+.advanced-filter-container {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px) saturate(180%);
+  border: 1.5px solid #e3e8f7;
+  border-radius: 16px;
+  margin-bottom: 2rem;
+  overflow: hidden;
+  box-shadow: 0 8px 40px 0 rgba(31, 38, 135, 0.10);
+}
+
+.filter-header {
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.filter-header:hover {
+  background-color: rgba(37, 99, 235, 0.05);
+}
+
+.filter-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.filter-icon {
+  width: 20px;
+  height: 20px;
+  color: #2563eb;
+  transition: transform 0.3s ease;
+}
+
+.filter-icon.expanded {
+  transform: rotate(180deg);
+}
+
+.filter-count {
+  background: linear-gradient(135deg, #2563eb, #5bc0eb);
+  color: white;
+  border-radius: 12px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  min-width: 20px;
+  text-align: center;
+}
+
+.filter-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-top: 1px solid transparent;
+}
+
+.filter-content.expanded {
+  max-height: 500px;
+  border-top-color: #e3e8f7;
+}
+
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.filter-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.875rem;
+}
+
+.filter-label svg {
+  color: #2563eb;
+}
+
+.filter-input {
+  padding: 0.75rem 1rem;
+  border: 1.5px solid #e3e8f7;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.8);
+  color: #1e293b;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+}
+
+.filter-input::placeholder {
+  color: #9ca3af;
+}
+
+.filter-input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  background: white;
+}
+
+.select-wrapper {
+  position: relative;
+}
+
+.filter-select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  padding-right: 2.5rem;
+  border: 1.5px solid #e3e8f7;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.8);
+  color: #1e293b;
+  font-size: 0.875rem;
+  appearance: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  background: white;
+}
+
+.filter-select option {
+  background: white;
+  color: #1e293b;
+}
+
+.select-arrow {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #2563eb;
+  font-size: 0.75rem;
+  pointer-events: none;
+  transition: transform 0.3s ease;
+}
+
+.select-wrapper:hover .select-arrow {
+  transform: translateY(-50%) scale(1.1);
+}
+
+.active-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 0 1.5rem 1.5rem;
+  border-top: 1px solid #e3e8f7;
+  margin-top: 1rem;
+  padding-top: 1rem;
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #2563eb, #5bc0eb);
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  animation: chipSlideIn 0.3s ease;
+}
+
+.chip-remove {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.chip-remove:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+@keyframes chipSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .filter-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .filter-content.expanded {
+    padding: 1rem;
+  }
+  
+  .active-filters {
+    gap: 0.25rem;
+  }
+  
+  .filter-chip {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.6rem;
+  }
+} 
