@@ -70,7 +70,7 @@ export function useScanHandler(stage = "Unknown") {
 
             const studentData = await studentRes.json();
 
-            const damruUrl = "http://localhost:8080";
+            const damruUrl = "https://backend.damrufest.org/";
 
             const damruRes = await fetch(
               `${damruUrl}/auth/fetchUser/${studentData.email}`

@@ -6,7 +6,7 @@ import LanyardPreview from "./LanyardPreview";
 import LanyardPrintService from "../services/lanyardPrintService";
 
 const ConfirmButton = ({ studentId, stage, onReset, studentData }) => {
-  const { user } = useAuth();
+  const { user, makeAuthenticatedRequest } = useAuth();
   const volunteerName = user?.displayName || "Anonymous";
   const { addToast } = useToast();
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -21,14 +21,17 @@ const ConfirmButton = ({ studentId, stage, onReset, studentData }) => {
     try {
       // Determine the correct endpoint based on stage
       const endpoint = stage === "arrival" ? "arrival" : stage;
-      const res = await fetch(`${API_BASE_URL}/scan/${endpoint}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          studentId,
-          volunteerName,
-        }),
-      });
+      const res = await makeAuthenticatedRequest(
+        `${API_BASE_URL}/scan/${endpoint}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            studentId,
+            volunteerName,
+          }),
+        }
+      );
 
       if (!res.ok) {
         const errData = await res.json().catch(() => ({}));
