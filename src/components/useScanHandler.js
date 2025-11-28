@@ -41,8 +41,12 @@ export function useScanHandler(stage = "Unknown") {
         } catch {
           throw new Error("Invalid QR code format");
         }
-        if (!parsed.studentId)
-          throw new Error("Invalid QR code: missing studentId");
+        if (!parsed.studentId && !parsed.passId)
+          throw new Error("Invalid QR code: missing studentId or passId");
+
+        const identifier = parsed.studentId || parsed.passId;
+        const userType = parsed.studentId ? "student" : "pass";
+
         if (isMounted.current) {
           setScanSuccess(true);
           setIsLoading(true);
@@ -52,42 +56,111 @@ export function useScanHandler(stage = "Unknown") {
         setTimeout(async () => {
           if (isMounted.current) setShowCheckmark(false);
           try {
-            if (isMounted.current) setStudentId(parsed.studentId);
+            if (isMounted.current) setStudentId(identifier);
 
-            // Fetch student data
-            const studentRes = await fetch(
-              `${API_BASE_URL}/student/${parsed.studentId}`
+            // Fetch data based on type
+            const dataRes = await fetch(
+              `${API_BASE_URL}/${userType}/${identifier}`
             );
-            if (!studentRes.ok) {
-              if (studentRes.status === 403) {
-                throw new Error("Student not found or access denied");
-              } else if (studentRes.status === 404) {
-                throw new Error("Student not found in database");
+            if (!dataRes.ok) {
+              if (dataRes.status === 403) {
+                throw new Error(
+                  `${
+                    userType === "student" ? "Student" : "Pass holder"
+                  } not found or access denied`
+                );
+              } else if (dataRes.status === 404) {
+                throw new Error(
+                  `${
+                    userType === "student" ? "Student" : "Pass holder"
+                  } not found in database`
+                );
               } else {
-                throw new Error(`Server error: ${studentRes.status}`);
+                throw new Error(`Server error: ${dataRes.status}`);
               }
             }
 
-            const studentData = await studentRes.json();
+            const userData = await dataRes.json();
 
-            const damruUrl = "https://backend.damrufest.org/";
+            if (userType === "student") {
+              // For students, also fetch from Damru backend
+              const damruUrl = "http://localhost:8080";
+              const damruRes = await fetch(
+                `${damruUrl}/auth/fetchUser/${userData.email}`
+              );
+              const damruData = await damruRes.json();
 
-            const damruRes = await fetch(
-              `${damruUrl}/auth/fetchUser/${studentData.email}`
-            );
-            const data = await damruRes.json();
+              // Enhance team member data with arrival information
+              if (damruData.data && damruData.data.teamsLed) {
+                for (const team of damruData.data.teamsLed) {
+                  if (team.members) {
+                    for (const member of team.members) {
+                      try {
+                        // For members with user accounts, check their arrival status
+                        if (member.user) {
+                          const arrivalRes = await fetch(
+                            `${damruUrl}/arrival/status/${member.user.id}`
+                          );
+                          if (arrivalRes.ok) {
+                            const arrivalData = await arrivalRes.json();
+                            member.user.Arrival = arrivalData.data;
+                          }
+                        } else {
+                          // For members without accounts, check arrival status by name
+                          const arrivalRes = await fetch(
+                            `${damruUrl}/arrival/status-by-name/${encodeURIComponent(
+                              member.name
+                            )}`
+                          );
+                          if (arrivalRes.ok) {
+                            const arrivalData = await arrivalRes.json();
+                            member.arrivalData = arrivalData.data;
+                            member.hasArrived = arrivalData.hasArrived;
+                          }
+                        }
+                      } catch (arrivalError) {
+                        console.warn(
+                          "Failed to fetch arrival status for team member:",
+                          arrivalError
+                        );
+                      }
+                    }
+                  }
+                }
+              }
 
-            if (isMounted.current) {
-              setStudentData(data.data);
-              addToast({
-                type: "success",
-                title: "Student Found!",
-                message: `Student ID: ${parsed.studentId}`,
-                duration: 3000,
-              });
-
-              // Save detailed analytics data
+              if (isMounted.current) {
+                setStudentData(damruData.data);
+                addToast({
+                  type: "success",
+                  title: "Student Found!",
+                  message: `Student ID: ${identifier}`,
+                  duration: 3000,
+                });
+              }
+            } else {
+              // For pass holders, use the pass data directly and add needed fields
+              if (isMounted.current) {
+                setStudentData({
+                  name: userData.data.name,
+                  email: userData.data.email,
+                  phone: userData.data.phone,
+                  passType: userData.data.passType,
+                  amount: userData.data.amount,
+                  passId: userData.data.passId,
+                  paymentStatus: userData.data.paymentStatus,
+                  isActive: userData.data.isActive,
+                });
+                addToast({
+                  type: "success",
+                  title: "Pass Holder Found!",
+                  message: `Pass ID: ${identifier}`,
+                  duration: 3000,
+                });
+              }
             }
+
+            // Save detailed analytics data
           } catch (error) {
             if (isMounted.current) {
               setScanErrorTrigger(true);

@@ -72,20 +72,23 @@ const SendQR = () => {
 
       const headers = lines[0].split(",").map((h) => h.trim().toLowerCase());
 
-      // Validate required columns
-      const requiredColumns = ["name", "email", "userid"];
-      const missingColumns = requiredColumns.filter(
+      // Validate required columns - different for different upload types
+      const baseRequiredColumns = ["name", "email"];
+      const missingBaseColumns = baseRequiredColumns.filter(
         (col) => !headers.includes(col)
       );
 
-      if (missingColumns.length > 0) {
+      if (missingBaseColumns.length > 0) {
         addToast({
           type: "error",
-          title: `Missing required columns: ${missingColumns.join(", ")}`,
+          title: `Missing required columns: ${missingBaseColumns.join(", ")}`,
           duration: 3500,
         });
         return;
       }
+
+      // Determine upload type based on available columns
+      const uploadType = headers.includes("userid") ? "student" : "pass";
 
       const students = lines
         .slice(1)
@@ -97,12 +100,21 @@ const SendQR = () => {
           });
           return student;
         })
-        .filter((student) => student.name && student.email && student.userid);
+        .filter((student) => {
+          // Filter based on upload type
+          if (uploadType === "student") {
+            return student.name && student.email && student.userid;
+          } else {
+            return student.name && student.email;
+          }
+        });
 
       setCsvData(students);
       addToast({
         type: "success",
-        title: `CSV loaded: ${students.length} students found!`,
+        title: `CSV loaded: ${students.length} ${
+          uploadType === "student" ? "students" : "pass holders"
+        } found!`,
         duration: 3500,
       });
     };

@@ -5,12 +5,51 @@ import StudentInfoCard from "../../components/StudentInfoCard";
 import ConfirmButton from "../../components/ConfirmButton";
 import ScanErrorAnimation from "../../components/ScanErrorAnimation";
 import { useScanHandler } from "../../components/useScanHandler";
-import Loader from '../../components/Loader';
+import Loader from "../../components/Loader";
 
 const ArrivalScan = () => {
   const navigate = useNavigate();
-  const scan = useScanHandler('Arrival');
+  const scan = useScanHandler("Arrival");
   const [showInfoOverlay, setShowInfoOverlay] = useState(false);
+
+  // Team arrival functionality
+  const handleMarkTeamArrival = async (memberIds, memberData) => {
+    try {
+      const token = localStorage.getItem("deskbuddy_token");
+      const response = await fetch("http://localhost:8080/arrival/mark-team", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          memberIds: memberIds, // Array of user IDs
+          memberData: memberData, // Array of {name, email} objects for non-account holders
+          markedBy: "admin",
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to mark team arrival");
+      }
+
+      const result = await response.json();
+      console.log("Team arrival marked successfully:", result);
+
+      // Refresh student data to show updated arrival status
+      if (scan.studentId) {
+        // Re-fetch student data to show updated arrivals
+        // Create a fake QR code JSON to trigger refresh
+        const refreshData = JSON.stringify({ studentId: scan.studentId });
+        scan.handleScanSuccess(refreshData);
+      }
+
+      return result;
+    } catch (error) {
+      console.error("Error marking team arrival:", error);
+      throw error;
+    }
+  };
 
   const handleReset = (mode) => {
     if (mode === "refresh") {
@@ -36,14 +75,14 @@ const ArrivalScan = () => {
   };
 
   const handleScanToggle = () => {
-    scan.setScanning(prev => !prev);
+    scan.setScanning((prev) => !prev);
     scan.setScanSuccess(false);
     scan.setIsLoading(false);
   };
 
   const getCurrentCameraName = () => {
     if (!scan.cameraId) return "Select Camera";
-    const camera = scan.cameras.find(cam => cam.id === scan.cameraId);
+    const camera = scan.cameras.find((cam) => cam.id === scan.cameraId);
     return camera ? camera.label || camera.id : "Select Camera";
   };
 
@@ -68,12 +107,19 @@ const ArrivalScan = () => {
         <header className="scanner-header">
           <div className="header-content">
             <div className="header-left">
-              <button 
+              <button
                 className="btn btn-secondary back-btn"
                 onClick={() => navigate("/arrival")}
               >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="m15 18-6-6 6-6"/>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path d="m15 18-6-6 6-6" />
                 </svg>
                 Back to Arrival
               </button>
@@ -88,25 +134,107 @@ const ArrivalScan = () => {
         </header>
 
         <main className="scanner-main">
-          <div className="scanner-flex-layout" style={window.innerWidth <= 900 ? {flexDirection: 'column', alignItems: 'center', gap: 0, marginLeft: 0, width: '100vw', minHeight: '100vh', justifyContent: 'flex-start'} : {flex: 1, alignItems: 'flex-start', justifyContent: 'flex-start', gap: '3rem', marginLeft: '-2rem'}}>
-            <div className="scanner-left" style={window.innerWidth <= 900 ? {width: '100vw', minWidth: 0, maxWidth: '100vw', padding: '1.2rem 0.5rem 0.5rem 0.5rem', height: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start'} : {flex: 1, maxWidth: 540, minWidth: 380, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-              <div className="scanner-container" style={window.innerWidth <= 900 ? {width: '100vw', height: 'auto', padding: 0, margin: 0, background: '#eaf1fb', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start'} : {}}>
-                <div className="camera-dropdown-container" style={window.innerWidth <= 900 ? {width: '100%', marginBottom: 12} : {}}>
-                  <button 
+          <div
+            className="scanner-flex-layout"
+            style={
+              window.innerWidth <= 900
+                ? {
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: 0,
+                    marginLeft: 0,
+                    width: "100vw",
+                    minHeight: "100vh",
+                    justifyContent: "flex-start",
+                  }
+                : {
+                    flex: 1,
+                    alignItems: "flex-start",
+                    justifyContent: "flex-start",
+                    gap: "3rem",
+                    marginLeft: "-2rem",
+                  }
+            }
+          >
+            <div
+              className="scanner-left"
+              style={
+                window.innerWidth <= 900
+                  ? {
+                      width: "100vw",
+                      minWidth: 0,
+                      maxWidth: "100vw",
+                      padding: "1.2rem 0.5rem 0.5rem 0.5rem",
+                      height: "auto",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "flex-start",
+                    }
+                  : {
+                      flex: 1,
+                      maxWidth: 540,
+                      minWidth: 380,
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }
+              }
+            >
+              <div
+                className="scanner-container"
+                style={
+                  window.innerWidth <= 900
+                    ? {
+                        width: "100vw",
+                        height: "auto",
+                        padding: 0,
+                        margin: 0,
+                        background: "#eaf1fb",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                      }
+                    : {}
+                }
+              >
+                <div
+                  className="camera-dropdown-container"
+                  style={
+                    window.innerWidth <= 900
+                      ? { width: "100%", marginBottom: 12 }
+                      : {}
+                  }
+                >
+                  <button
                     className="camera-dropdown-btn"
-                    onClick={() => scan.setShowCameraDropdown(!scan.showCameraDropdown)}
+                    onClick={() =>
+                      scan.setShowCameraDropdown(!scan.showCameraDropdown)
+                    }
                     disabled={scan.isLoading}
                   >
                     <span className="camera-icon">📹</span>
-                    <span className="camera-text">{getCurrentCameraName()}</span>
-                    <span className={`dropdown-arrow ${scan.showCameraDropdown ? 'rotated' : ''}`}>▼</span>
+                    <span className="camera-text">
+                      {getCurrentCameraName()}
+                    </span>
+                    <span
+                      className={`dropdown-arrow ${
+                        scan.showCameraDropdown ? "rotated" : ""
+                      }`}
+                    >
+                      ▼
+                    </span>
                   </button>
                   {scan.showCameraDropdown && (
                     <div className="camera-dropdown-menu">
                       {scan.cameras.map((cam) => (
                         <button
                           key={cam.id}
-                          className={`camera-option ${scan.cameraId === cam.id ? 'selected' : ''}`}
+                          className={`camera-option ${
+                            scan.cameraId === cam.id ? "selected" : ""
+                          }`}
                           onClick={() => scan.handleCameraSelect(cam.id)}
                         >
                           {cam.label || cam.id}
@@ -115,7 +243,28 @@ const ArrivalScan = () => {
                     </div>
                   )}
                 </div>
-                <div className={`scanner-box ${scan.scanning ? 'scanning' : ''} ${scan.scanSuccess ? 'scan-success' : ''} ${scan.isLoading ? 'loading' : ''}`} style={window.innerWidth <= 900 ? {width: 320, height: 320, maxWidth: '95vw', maxHeight: 320, borderRadius: 16, padding: 0, margin: '0 auto', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center'} : {}}>
+                <div
+                  className={`scanner-box ${scan.scanning ? "scanning" : ""} ${
+                    scan.scanSuccess ? "scan-success" : ""
+                  } ${scan.isLoading ? "loading" : ""}`}
+                  style={
+                    window.innerWidth <= 900
+                      ? {
+                          width: 320,
+                          height: 320,
+                          maxWidth: "95vw",
+                          maxHeight: 320,
+                          borderRadius: 16,
+                          padding: 0,
+                          margin: "0 auto",
+                          background: "#fff",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }
+                      : {}
+                  }
+                >
                   <Html5QrScanner
                     onScanSuccess={scan.handleScanSuccess}
                     cameraId={scan.cameraId}
@@ -128,9 +277,28 @@ const ArrivalScan = () => {
                     <div className="checkmark-pulse-overlay">
                       <div className="checkmark-circle">
                         <svg width="64" height="64" viewBox="0 0 64 64">
-                          <circle cx="32" cy="32" r="30" fill="#10b981" opacity="0.15" />
-                          <circle cx="32" cy="32" r="24" fill="#10b981" opacity="0.25" />
-                          <polyline points="22,34 30,42 44,26" fill="none" stroke="#10b981" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+                          <circle
+                            cx="32"
+                            cy="32"
+                            r="30"
+                            fill="#10b981"
+                            opacity="0.15"
+                          />
+                          <circle
+                            cx="32"
+                            cy="32"
+                            r="24"
+                            fill="#10b981"
+                            opacity="0.25"
+                          />
+                          <polyline
+                            points="22,34 30,42 44,26"
+                            fill="none"
+                            stroke="#10b981"
+                            strokeWidth="5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
                         </svg>
                       </div>
                     </div>
@@ -138,9 +306,23 @@ const ArrivalScan = () => {
                   {scan.isLoading && <Loader />}
                   <ScanErrorAnimation trigger={scan.scanErrorTrigger} />
                 </div>
-                <div className="scanner-controls" style={window.innerWidth <= 900 ? {width: '100%', marginTop: 18, display: 'flex', justifyContent: 'center'} : {}}>
-                  <button 
-                    className={`scanner-action-btn ${isButtonDisabled() ? 'disabled' : ''}`} 
+                <div
+                  className="scanner-controls"
+                  style={
+                    window.innerWidth <= 900
+                      ? {
+                          width: "100%",
+                          marginTop: 18,
+                          display: "flex",
+                          justifyContent: "center",
+                        }
+                      : {}
+                  }
+                >
+                  <button
+                    className={`scanner-action-btn ${
+                      isButtonDisabled() ? "disabled" : ""
+                    }`}
                     onClick={handleScanToggle}
                     disabled={isButtonDisabled()}
                   >
@@ -148,15 +330,33 @@ const ArrivalScan = () => {
                   </button>
                 </div>
                 {!scan.cameraId && window.innerWidth <= 900 && (
-                  <p className="scanner-hint" style={{marginTop: 10}}>Please select a camera first</p>
+                  <p className="scanner-hint" style={{ marginTop: 10 }}>
+                    Please select a camera first
+                  </p>
                 )}
               </div>
             </div>
             {window.innerWidth > 900 && (
-              <div className="scanner-right" style={{flex: 1, maxWidth: 480, minWidth: 340, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', marginTop: '1.5rem'}}>
+              <div
+                className="scanner-right"
+                style={{
+                  flex: 1,
+                  maxWidth: 480,
+                  minWidth: 340,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "flex-start",
+                  marginTop: "1.5rem",
+                }}
+              >
                 {scan.studentData && (
                   <>
-                    <StudentInfoCard student={scan.studentData} currentStage="arrival" />
+                    <StudentInfoCard
+                      student={scan.studentData}
+                      currentStage="arrival"
+                      onMarkTeamArrival={handleMarkTeamArrival}
+                    />
                     <ConfirmButton
                       studentId={scan.studentId}
                       stage="arrival"
@@ -171,9 +371,19 @@ const ArrivalScan = () => {
             )}
             {window.innerWidth <= 900 && showInfoOverlay && (
               <div className="scanner-info-overlay">
-                <button className="scanner-info-close" onClick={() => setShowInfoOverlay(false)} aria-label="Close Info Card">×</button>
+                <button
+                  className="scanner-info-close"
+                  onClick={() => setShowInfoOverlay(false)}
+                  aria-label="Close Info Card"
+                >
+                  ×
+                </button>
                 <div className="scanner-info-card-wrapper">
-                  <StudentInfoCard student={scan.studentData} currentStage="arrival" />
+                  <StudentInfoCard
+                    student={scan.studentData}
+                    currentStage="arrival"
+                    onMarkTeamArrival={handleMarkTeamArrival}
+                  />
                   <ConfirmButton
                     studentId={scan.studentId}
                     stage="arrival"

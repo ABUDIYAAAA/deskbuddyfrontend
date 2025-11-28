@@ -45,13 +45,6 @@ const Dashboard = () => {
       svg: ScanQR,
       description: "Generate and send QR codes to students",
     },
-    {
-      label: "Analytics",
-      route: "/analytics",
-      color: "var(--info-color)",
-      svg: DocumentScanPNG,
-      description: "View scan analytics and volunteer stats",
-    },
   ];
 
   return (
