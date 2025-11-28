@@ -16,18 +16,21 @@ const ArrivalScan = () => {
   const handleMarkTeamArrival = async (memberIds, memberData) => {
     try {
       const token = localStorage.getItem("deskbuddy_token");
-      const response = await fetch("http://localhost:8080/arrival/mark-team", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          memberIds: memberIds, // Array of user IDs
-          memberData: memberData, // Array of {name, email} objects for non-account holders
-          markedBy: "admin",
-        }),
-      });
+      const response = await fetch(
+        "https://backend.damrufest.org/arrival/mark-team",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            memberIds: memberIds, // Array of user IDs
+            memberData: memberData, // Array of {name, email} objects for non-account holders
+            markedBy: "admin",
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to mark team arrival");

@@ -41,7 +41,7 @@ const ConfirmButton = ({ studentId, stage, onReset, studentData }) => {
       // If this is arrival stage, also mark arrival in Damru platform backend
       if (stage === "arrival") {
         try {
-          const damruBackendUrl = "http://localhost:8080";
+          const damruBackendUrl = "https://backend.damrufest.org";
 
           let requestBody;
           if (isPassHolder) {

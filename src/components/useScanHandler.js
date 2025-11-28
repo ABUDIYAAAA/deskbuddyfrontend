@@ -84,7 +84,7 @@ export function useScanHandler(stage = "Unknown") {
 
             if (userType === "student") {
               // For students, also fetch from Damru backend
-              const damruUrl = "http://localhost:8080";
+              const damruUrl = "https://backend.damrufest.org";
               const damruRes = await fetch(
                 `${damruUrl}/auth/fetchUser/${userData.email}`
               );
